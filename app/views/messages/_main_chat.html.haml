@@ -1,33 +1,25 @@
 .chat-main
   .chat-main__group-info
     .chat-main__group-info__title
-      %h2.chat-main__group-info__title__name test
-      %ul.chat-main__group-info__title__member Member : masa dada
+      .chat-main__group-info__title__name
+        = @group.name
+      .chat-main__group-info__title__member 
+        = "Member : "
+        - @group.users.each do |user|
+          = user.name
+
     .chat-main__group-info__edit
-      = link_to "#", class: "chat-main__group-info__edit__btn" do
+      = link_to edit_group_path(@group), class: "chat-main__group-info__edit__btn" do
         Edit
 
   .chat-main__message-list
-    .chat-main__message-list__block
-      .chat-main__message-list__block__member
-        %p.chat-main__message-list__block__member__name masa
-        %p.chat-main__message-list__block__member__date 2020/03/14(Sat) 16:11:34
-      %p.chat-main__message-list__block__text hello
-    .chat-main__message-list__block
-      .chat-main__message-list__block__member
-        %p.chat-main__message-list__block__member__name dada
-        %p.chat-main__message-list__block__member__date 2020/03/14(Sat) 16:12:37
-      %p.chat-main__message-list__block__text bello
-    .chat-main__message-list__block
-      .chat-main__message-list__block__member
-        %p.chat-main__message-list__block__member__name masa
-        %p.chat-main__message-list__block__member__date 2020/03/14(Sat) 16:13:45
-      %p.chat-main__message-list__block__text world
+    = render @messages
   .chat-main__message-form
-    %form.new_message
-      .input-box
-        %input.input-box__text{placeholder: "type a message", type: "text" }
-          %label{class: "input-box__image"}
+    .form
+      = form_for [@group, @message] do |f|
+        .input-box
+          = f.text_field :content, class: 'input-box__text', placeholder: 'type a message'
+          = f.label :image, class: 'input-box__image' do
             = icon('fas', 'image')
-            %input.input-box__file{type: "file"}
-      %input.send-btn{type: "submit", name: "commit", value: "Send", data_disable_with: "Send"}
+            = f.file_field :image, class: 'input-box__file'
+        = f.submit 'Send', class: 'send-btn'
